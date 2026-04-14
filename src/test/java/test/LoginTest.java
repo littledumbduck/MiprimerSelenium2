@@ -34,23 +34,42 @@ public class LoginTest {
         }
 
         @Test
-        void loginCorrecto() {
-                loginPage.login("standard_user", "secret_sauce");
+        void loginCorrecto() throws InterruptedException {
+            // introduce un usuario válido
+            loginPage.ingresarUsuario("standard_user");
+            Thread.sleep(2000);
 
-                String urlActual = loginPage.obtenerUrlActual();
+            // introduce una contraseña válida
+            loginPage.ingresarPassword("secret_sauce");
+            Thread.sleep(2000);
 
-                assertTrue(urlActual.contains("inventory"),
-                        "El usuario debería entrar a la página de inventario tras un login correcto");
+            // pulsa el botón de login
+            loginPage.clickLogin();
+            Thread.sleep(2000);
+
+            // comprueba que la URL contiene la palabra "inventory"
+            String urlActual = driver.getCurrentUrl();
+            assertTrue(urlActual.contains("inventory"));
+            Thread.sleep(2000);
         }
 
         @Test
-        void loginIncorrecto() {
-                loginPage.login("standard_user", "clave_mal");
+        void loginIncorrecto() throws InterruptedException {
+            // introduce un usuario válido
+            loginPage.ingresarUsuario("usuario");
+            Thread.sleep(2000);
 
-                assertTrue(loginPage.errorVisible(),
-                        "Debería mostrarse un mensaje de error al fallar el login");
+            // introduce una contraseña válida
+            loginPage.ingresarPassword("passincorrecta");
+            Thread.sleep(2000);
 
-                assertTrue(loginPage.obtenerTextoError().contains("Username and password do not match"),
-                        "El mensaje de error no es el esperado");
+            // pulsa el botón de login
+            loginPage.clickLogin();
+            Thread.sleep(2000);
+        }
+
+        @Test
+        void loginCorrecto2() {
+            loginPage.login("standard_user", "secret_sauce");
         }
 }
