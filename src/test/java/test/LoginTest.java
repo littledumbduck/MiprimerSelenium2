@@ -66,10 +66,18 @@ public class LoginTest {
             // pulsa el botón de login
             loginPage.clickLogin();
             Thread.sleep(2000);
+
+            // Comprueba que la URL NO contiene la palabra "inventory"
+            String urlActual = driver.getCurrentUrl();
+            assertFalse(urlActual.contains("inventory"));
+            Thread.sleep(2000);
         }
 
         @Test
-        void loginCorrecto2() {
+        void loginCorrecto2() throws InterruptedException {
             loginPage.login("standard_user", "secret_sauce");
+            String urlActual = driver.getCurrentUrl();
+            assertTrue(urlActual.contains("inventory"));
+            Thread.sleep(2000);
         }
 }
